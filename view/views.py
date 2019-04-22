@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from google.cloud import storage
 
 posts=[
     {
@@ -23,4 +24,10 @@ def home(request):
     return render(request,'view/home.html',context)
 
 def about(request):
+    
+
+    client = storage.Client()
+    bucket = client.get_bucket('app1-3223c.appspot.com')
+    blob = bucket.blob('my-test-file.txt')
+    blob.upload_from_string('this is test content!')
     return render(request,'view/about.html')
