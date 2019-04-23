@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from google.cloud import storage
-
+import pyrebase
 posts=[
     {
        'Name':'Muaaz',
@@ -15,6 +14,12 @@ posts=[
 
     }
 ]
+config = {
+    "apiKey": "AIzaSyDgCSuHb1FL4UbA7CJsWtKanpMxPdiqUFQ",
+    "authDomain": "app1-3223c.firebaseapp.com",
+    "databaseURL": "https://app1-3223c.firebaseio.com",
+    "storageBucket": "app1-3223c.appspot.com"
+    }
 # Create your views here.
 def home(request):
     context={
@@ -26,8 +31,11 @@ def home(request):
 def about(request):
     
 
-    client = storage.Client()
-    bucket = client.get_bucket('app1-3223c.appspot.com')
-    blob = bucket.blob('my-test-file.txt')
-    blob.upload_from_string('this is test content!')
+    firebase = pyrebase.initialize_app(config)
+
+    storage = firebase.storage()
+
+    storage.child('pics/033ce231-24dc-4698-bd52-d4bc16f0b7a9.jpg').download('','downloaded.jpg')
+   
+
     return render(request,'view/about.html')
